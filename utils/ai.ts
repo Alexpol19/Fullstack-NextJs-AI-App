@@ -5,6 +5,7 @@ import {
   OutputFixingParser,
 } from 'langchain/output_parsers'
 import { z } from 'zod'
+import { JournalEntry } from "@prisma/client";
 
 const parser = StructuredOutputParser.fromZodSchema(
   z.object({
@@ -23,6 +24,11 @@ const parser = StructuredOutputParser.fromZodSchema(
       .describe(
         'a hexidecimal color code that represents the mood of the entry. Example #0101fe for blue representing happiness.'
       ),
+    // sentimentScore: z
+    //   .number()
+    //   .describe(
+    //     'sentiment of the text and rated on a scale from -10 to 10, where -10 is extremely negative, 0 is neutral, and 10 is extremely positive.'
+    //   ),
   })
 )
 
@@ -43,16 +49,14 @@ const getPrompt = async (content: string) => {
   return input
 }
 
-export const analyze = async (content: string) => {
-  const input = await getPrompt(content)
+export const analyze = async (entry: JournalEntry) => {
+  const input = await getPrompt(entry.content)
   const model = new OpenAI({
     temperature: 0,
     modelName: 'gpt-3.5-turbo'
   })
 
   const output = await model.call(input)
-
-  console.log('output', output)
 
   try {
     return parser.parse(output)

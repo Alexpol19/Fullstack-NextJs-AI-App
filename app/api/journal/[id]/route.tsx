@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import { getUserByClerkId } from "../../../../utils/auth"
 import { prisma } from "../../../../utils/db";
-import { revalidatePath } from "next/cache";
+import { analyze } from "../../../../utils/ai";
 
 export const PATCH = async (request: Request, { params }: {params: {id: string}}) => {
   const { content } = await request.json();
   const user = await getUserByClerkId();
 
   if(user) {
-    const updatedEntry = await prisma.journalEntry.update({
+    const entry = await prisma.journalEntry.update({
       where: {
         userId_id: {
           userId: user.id, 
@@ -19,8 +19,26 @@ export const PATCH = async (request: Request, { params }: {params: {id: string}}
         content: content
       }
     })
-    
-    return NextResponse.json({data: updatedEntry})
+
+    const analysis = await analyze(entry);
+
+    const entryAnalysis = await prisma.analysis.upsert({
+      where: {
+        entryId: entry.id,
+      },
+      create: {
+        entryId: entry.id,
+        ...analysis
+      },
+      update: analysis
+    })
+
+    const entryWithAnalysis = {
+      ...entry,
+      analysis: entryAnalysis
+    }
+
+    return NextResponse.json({data: entryWithAnalysis})
   }
 
   return NextResponse.error()
