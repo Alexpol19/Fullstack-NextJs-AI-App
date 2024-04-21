@@ -1,9 +1,13 @@
-import { OpenAI } from "@langchain/openai";
+import { OpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { PromptTemplate } from '@langchain/core/prompts'
+import { loadQARefineChain } from 'langchain/chains'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+
 import {
   StructuredOutputParser,
   OutputFixingParser,
 } from 'langchain/output_parsers'
+import { Document } from 'langchain/document'
 import { z } from 'zod'
 import { JournalEntry } from "@prisma/client";
 
@@ -68,4 +72,25 @@ export const analyze = async (entry: JournalEntry) => {
     const fix = await fixParser.parse(output)
     return fix
   }
+}
+
+export const qa = async (question: string, entries: {id: string, createdAt: Date, content: string}[]) => {
+  const docs = entries.map(
+    (entry) =>
+      new Document({
+        pageContent: entry.content,
+        metadata: { source: entry.id, date: entry.createdAt },
+      })
+  )
+  const model = new OpenAI({ temperature: 0, modelName: 'gpt-3.5-turbo' })
+  const chain = loadQARefineChain(model)
+  const embeddings = new OpenAIEmbeddings()
+  const store = await MemoryVectorStore.fromDocuments(docs, embeddings)
+  const relevantDocs = await store.similaritySearch(question)
+  const res = await chain.call({
+    input_documents: relevantDocs,
+    question,
+  })
+
+  return res.output_text
 }
