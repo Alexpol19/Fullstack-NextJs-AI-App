@@ -33,7 +33,7 @@ export const updateEntry = async (id: string, content: string) => {
 
 export const deleteEntry = async (id: string) => {
   const res = await fetch(
-    new Request(createURL(`/api/entry/${id}`), {
+    new Request(createURL(`/api/journal/${id}`), {
       method: 'DELETE',
     })
   )
