@@ -2,6 +2,28 @@ import { NextResponse } from "next/server";
 import { getUserByClerkId } from "../../../../utils/auth"
 import { prisma } from "../../../../utils/db";
 import { analyze } from "../../../../utils/ai";
+import { revalidatePath } from "next/cache";
+
+export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
+  const user = await getUserByClerkId()
+
+  if(user) {
+    await prisma.journalEntry.delete({
+      where: {
+        userId_id: {
+          userId: user.id,
+          id: params.id,
+        },
+      },
+    })
+
+    revalidatePath('/journal')
+
+    return NextResponse.json({ data: { id: params.id } })
+  }
+
+  return NextResponse.error()
+}
 
 export const PATCH = async (request: Request, { params }: {params: {id: string}}) => {
   const { content } = await request.json();

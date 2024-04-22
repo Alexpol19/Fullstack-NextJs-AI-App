@@ -27,7 +27,7 @@ const JournalEditorPage = async ({params}: {params : { id: string}}) => {
   if(!entry) redirect('/journal')
 
   return (
-    <div className="h-full w-full grid grid-cols-3">
+    <div className="h-full w-full">
       <Editor entry={entry} />
     </div>
   )

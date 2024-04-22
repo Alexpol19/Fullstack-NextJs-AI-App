@@ -40,9 +40,11 @@ const CustomTooltip = ({ payload, label, active }: CustomTooltipProps) => {
   return null
 }
 
-const HistoryChart = ({ data }: {
-  data: Analysis[]
-}) => {
+type HistoryChartProps = {
+  data: Analysis[];
+}
+
+const HistoryChart = ({ data }: HistoryChartProps) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart width={300} height={100} data={data}>

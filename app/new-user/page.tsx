@@ -25,7 +25,7 @@ const createNewUser = async () => {
 }
 const NewUser = async () => {
   await createNewUser();
-  return <></>
+  return <div>...Loading</div>
 }
 
 export default NewUser

@@ -9,7 +9,6 @@ export const POST = async () => {
   if(user) {
     const entry = await prisma.journalEntry.create({
       data: {
-        // userId: user.id,
         user: {
           connect: {
             id: user.id
@@ -23,11 +22,11 @@ export const POST = async () => {
       data: {
         userId: user.id,
         entryId: entry.id,
-        mood: '',
-        subject: '',
+        mood: 'Neutral',
+        subject: 'None',
         negative: false,
-        summary: '',
-        color: '',
+        summary: 'None',
+        color: '#0101fe',
         sentimentScore: 0,
       }
     })
