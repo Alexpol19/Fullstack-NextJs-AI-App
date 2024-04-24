@@ -85,12 +85,14 @@ const Editor = ({entry}: EditorProps) => {
                 <div className="text-xl font-semibold w-1/3">Subject</div>
                 <div className="text-xl">{currentEntry.analysis.subject}</div>
               </li>
-
+              <li className="py-4 px-8 flex items-center justify-between">
+                <div className="text-xl font-semibold">Summary</div>
+                <div className="text-xl text-right pl-1">{currentEntry.analysis.summary}</div>
+              </li>
               <li className="py-4 px-8 flex items-center justify-between">
                 <div className="text-xl font-semibold">Mood</div>
                 <div className="text-xl">{currentEntry.analysis.mood}</div>
               </li>
-
               <li className="py-4 px-8 flex items-center justify-between">
                 <div className="text-xl font-semibold">Negative</div>
                 <div className="text-xl">
