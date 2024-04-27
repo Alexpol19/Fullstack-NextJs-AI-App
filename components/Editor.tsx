@@ -64,14 +64,14 @@ const Editor = ({entry}: EditorProps) => {
           <div className="w-[16px] h-[16px] rounded-full bg-green-500"></div>
         )}
       </div>
-      <div className="col-span-2">
+      <div className="col-span-2 border border-transparent my-[5px]">
         <textarea
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className="w-full h-full text-xl p-8"
+          className="w-full h-full text-xl p-8 m-0 border-0"
         />
       </div>
-      <div className="border-l border-black/5">
+      <div className="col-span-1 border-l border-black/5">
         <div
           style={{ background: currentEntry?.analysis?.color }}
           className="h-[100px] bg-blue-600 text-white p-8"
@@ -85,12 +85,14 @@ const Editor = ({entry}: EditorProps) => {
                 <div className="text-xl font-semibold w-1/3">Subject</div>
                 <div className="text-xl">{currentEntry.analysis.subject}</div>
               </li>
-
+              <li className="py-4 px-8 flex items-center justify-between">
+                <div className="text-xl font-semibold">Summary</div>
+                <div className="text-xl text-right pl-1">{currentEntry.analysis.summary}</div>
+              </li>
               <li className="py-4 px-8 flex items-center justify-between">
                 <div className="text-xl font-semibold">Mood</div>
                 <div className="text-xl">{currentEntry.analysis.mood}</div>
               </li>
-
               <li className="py-4 px-8 flex items-center justify-between">
                 <div className="text-xl font-semibold">Negative</div>
                 <div className="text-xl">
