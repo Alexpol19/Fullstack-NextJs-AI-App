@@ -24,7 +24,7 @@ const Question = () => {
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          className="border border-gray-300 rounded-md p-2 text-lg"
+          className="border border-gray-300 rounded-md p-2 text-lg w-[500px]"
           disabled={loading}
           placeholder="Ask a question..."
         />
